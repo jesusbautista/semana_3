@@ -1,7 +1,7 @@
 <?php require_once 'includes/connection_db.php'; ?>
 <?php require_once 'includes/functions.php'; ?>
 	<?php 
-	#cabezera del sitio web
+	#Cambios Realizado el domingo 16 de julio de 2017
 	include'includes/header.php';  
 	?>
 	<table id="estructura">
@@ -13,38 +13,25 @@
 				<!--lista de cursos de navegacion
 				traidos desde php-->
 				<?php
-					#consulta a la base de datos
-					#cursos representa la consulta a la bd
-					#curso representa los elementos recorridos en el loop
-					$cursos=mysql_query('SELECT * FROM cursos',$conexion);
-					if (!$cursos) 
-					{
-						die("No se ha podido realizar la consulta:".mysql_error());
-					}
-					#si se ejecuto la consulta entra al loop y busca los cursos
+					
+					#Refactorizando
+				$cursos=obtener_cursos();
+					#se utiliza dentro del loop while
 					while ($curso=mysql_fetch_array($cursos)) 
 					{
 						# imprime la lista de cursos
-						echo "<li>{$curso['nombre']}.</li>";
+						echo "<li>{$curso['nombre']}</li><ul class='capitulos'>";
 
-						
-						#imprimiendo la lista de capitulos (ul)
-						echo "<br>";
-						echo "<ul class='capitulos'>";
-						#buscando los capitulos tantos cursos haya
-						$capitulos=mysql_query('SELECT nombre FROM capitulos WHERE cursos_id='.$curso['id'],$conexion);
-						if (!$capitulos) 
-						{
-						die("No se ha podido realizar la consulta:".mysql_error());
-						}
+
+						#se pasa los id de los cursos como parametros
+				$capitulos=obtener_capitulos_por_curso($curso['id']);
 					while ($capitulo=mysql_fetch_array($capitulos)) 
 					{
 						# imprime la lista de capitulos usando html y php
-						echo  "<li>{$capitulo['nombre']}.</li>";
+						echo  "<li>".$capitulo['nombre']."</li>";
 					}
 					#cierre de la lista de capitulos(ul)
 					echo "</ul>";
-					echo "<br>";
 					
 					}
 
